@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="d-flex space-between header px-10">
+      <h1>Welcome to the Popup</h1>
+      <span class="pt-10">
+        <label class="switch"
+          ><input type="checkbox" name="isActive" id="activate" />
+          <div class="activate"></div>
+        </label>
+      </span>
+    </div>
+    <div class="container">
+      <div class="px-10">
+        <ul>
+          <li>
+            <div class="d-flex space-between">
+              <h3>Hide balance</h3>
+              <span class="pt-10">
+                <label class="switch"
+                  ><input
+                    type="checkbox"
+                    name="isHideBalance"
+                    class="input"
+                    id="hide_balance"
+                  />
+                  <div></div>
+                </label>
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="d-flex space-between">
+              <h3>Show buyer profile</h3>
+              <span class="pt-10">
+                <label class="switch"
+                  ><input
+                    type="checkbox"
+                    name="isShowProfile"
+                    class="input"
+                    id="show_profile"
+                  />
+                  <div></div>
+                </label>
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="d-flex space-between">
+              <h3>Auto refresh request page</h3>
+              <span class="pt-10">
+                <label class="switch"
+                  ><input
+                    type="checkbox"
+                    name="isAutoRefresh"
+                    class="input"
+                    id="auto_refresh"
+                  />
+                  <div></div>
+                </label>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
