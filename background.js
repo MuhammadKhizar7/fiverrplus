@@ -5,7 +5,7 @@ let store = {
   isAutoRefresh: true,
 }
 
-chrome.action.setBadgeBackgroundColor({ color: '#e32f02' })
+chrome.browserAction.setBadgeBackgroundColor({ color: '#e32f02' })
 
 chrome.runtime.onInstalled.addListener((details) => {
   chrome.storage.local.get('store', (data) => {
@@ -33,7 +33,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 function refresh(tabId) {
   var code = () => window.location.reload()
-  chrome.scripting.executeScript({
+  chrome.tab.executeScript({
     target: { tabId, allFrames: true },
     func: code,
   })
@@ -46,7 +46,7 @@ function backgroundTimeInterval(timer, totalSec, tabId) {
     ('0' + Math.floor(timer / 60)).slice(-2) +
     ':' +
     ('0' + (timer % 60)).slice(-2)
-  chrome.action.setBadgeText({
+  chrome.browserAction.setBadgeText({
     tabId: tabId,
     text: badge,
   })
@@ -68,7 +68,7 @@ function backgroundTimeInterval(timer, totalSec, tabId) {
           ('0' + Math.floor(timer / 60)).slice(-2) +
           ':' +
           ('0' + (timer % 60)).slice(-2)
-        chrome.action.setBadgeText({
+        chrome.browserAction.setBadgeText({
           tabId: tabId,
           text: badge,
         })
@@ -80,48 +80,48 @@ function backgroundTimeInterval(timer, totalSec, tabId) {
 // Stop Timer Interval
 function backgroundTimerIntervalStop(tabId) {
   clearInterval(timeinterval)
-  chrome.action.setBadgeText({
+  chrome.browserAction.setBadgeText({
     tabId: tabId,
     text: '',
   })
 }
 
-let lifeline
+// let lifeline
 
-keepAlive()
+// keepAlive()
 
-chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === 'keepAlive') {
-    lifeline = port
-    setTimeout(keepAliveForced, 295e3) // 5 minutes minus 5 seconds
-    port.onDisconnect.addListener(keepAliveForced)
-  }
-})
+// chrome.runtime.onConnect.addListener((port) => {
+//   if (port.name === 'keepAlive') {
+//     lifeline = port
+//     setTimeout(keepAliveForced, 295e3) // 5 minutes minus 5 seconds
+//     port.onDisconnect.addListener(keepAliveForced)
+//   }
+// })
 
-function keepAliveForced() {
-  lifeline?.disconnect()
-  lifeline = null
-  keepAlive()
-}
+// function keepAliveForced() {
+//   lifeline?.disconnect()
+//   lifeline = null
+//   keepAlive()
+// }
 
-async function keepAlive() {
-  if (lifeline) return
-  for (const tab of await chrome.tabs.query({ url: '*://*/*' })) {
-    try {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: () => chrome.runtime.connect({ name: 'keepAlive' }),
-        // `function` will become `func` in Chrome 93+
-      })
-      chrome.tabs.onUpdated.removeListener(retryOnTabUpdate)
-      return
-    } catch (e) {}
-  }
-  chrome.tabs.onUpdated.addListener(retryOnTabUpdate)
-}
+// async function keepAlive() {
+//   if (lifeline) return
+//   for (const tab of await chrome.tabs.query({ url: '*://*/*' })) {
+//     try {
+//       await chrome.scripting.executeScript({
+//         target: { tabId: tab.id },
+//         function: () => chrome.runtime.connect({ name: 'keepAlive' }),
+//         // `function` will become `func` in Chrome 93+
+//       })
+//       chrome.tabs.onUpdated.removeListener(retryOnTabUpdate)
+//       return
+//     } catch (e) {}
+//   }
+//   chrome.tabs.onUpdated.addListener(retryOnTabUpdate)
+// }
 
-async function retryOnTabUpdate(tabId, info, tab) {
-  if (info.url && /^(file|https?):/.test(info.url)) {
-    keepAlive()
-  }
-}
+// async function retryOnTabUpdate(tabId, info, tab) {
+//   if (info.url && /^(file|https?):/.test(info.url)) {
+//     keepAlive()
+//   }
+// }
