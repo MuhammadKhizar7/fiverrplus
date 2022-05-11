@@ -33,9 +33,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 function refresh(tabId) {
   var code = () => window.location.reload()
-  chrome.tab.executeScript({
-    target: { tabId, allFrames: true },
-    func: code,
+  chrome.tabs.executeScript(tabId, {
+    // target: { tabId, allFrames: true },
+    // func: code,
+    code: 'window.location.reload()',
   })
 }
 
