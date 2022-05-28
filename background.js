@@ -16,10 +16,12 @@ chrome.runtime.onInstalled.addListener((details) => {
 })
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  console.log(tab)
+  console.log(tab.url.split('/')[5].split('?')[0])
   if (changeInfo.status == 'complete') {
     if (
       tab.url.split('/').includes('www.fiverr.com') &&
-      tab.url.split('/')[5] == 'requests'
+      tab.url.split('/')[5].split('?')[0] == 'requests'
     ) {
       chrome.storage.local.get('store', (data) => {
         if (data.store.isAutoRefresh) {
@@ -27,6 +29,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
           backgroundTimeInterval(180, 180, tabId)
         }
       })
+    } else {
+      backgroundTimerIntervalStop(tabId)
     }
   }
 })
