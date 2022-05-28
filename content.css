@@ -1,3 +1,18 @@
 .user-balance {
   display: none;
 }
+html {
+  filter: invert(91%) hue-rotate(180deg);
+}
+
+html img,
+svg,
+video {
+  filter: invert(91%) hue-rotate(180deg);
+}
+
+.bg-co-green-700,
+.btn-green-grad,
+.banner {
+  filter: invert(91%) hue-rotate(180deg);
+}
