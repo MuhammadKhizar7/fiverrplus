@@ -6,13 +6,13 @@ html.darkmode {
 }
 
 html.darkmode img,
-svg,
-video {
+html.darkmode svg,
+html.darkmode video {
   filter: invert(91%) hue-rotate(180deg);
 }
 html.darkmode
 .bg-co-green-700,
-.btn-green-grad,
-.banner {
+html.darkmode .btn-green-grad,
+html.darkmode .banner {
   filter: invert(91%) hue-rotate(180deg);
 }
