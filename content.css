@@ -1,16 +1,16 @@
 .user-balance {
   display: none;
 }
-html {
+html.darkmode {
   filter: invert(91%) hue-rotate(180deg);
 }
 
-html img,
+html.darkmode img,
 svg,
 video {
   filter: invert(91%) hue-rotate(180deg);
 }
-
+html.darkmode
 .bg-co-green-700,
 .btn-green-grad,
 .banner {

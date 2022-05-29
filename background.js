@@ -3,6 +3,7 @@ let store = {
   isHideBalance: true,
   isShowProfile: true,
   isAutoRefresh: true,
+  isDarkMode: false,
 }
 
 chrome.browserAction.setBadgeBackgroundColor({ color: '#e32f02' })
@@ -16,7 +17,27 @@ chrome.runtime.onInstalled.addListener((details) => {
 })
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status === 'loading') {
+    chrome.storage.local.get('store', (data) => {
+      if (data.store.isDarkMode) {
+        chrome.tabs.executeScript(tabId, {
+          // target: { tabId, allFrames: true },
+          // func: code,
+          code: "document.documentElement.classList.add('darkmode')",
+        })
+      }
+    })
+  }
   if (changeInfo.status == 'complete') {
+    // chrome.storage.local.get('store', (data) => {
+    //   if (data.store.isDarkMode) {
+    //     chrome.tabs.executeScript(tabId, {
+    //       // target: { tabId, allFrames: true },
+    //       // func: code,
+    //       code: "document.documentElement.classList.add('darkmode')",
+    //     })
+    //   }
+    // })
     if (
       tab.url.split('/').includes('www.fiverr.com') &&
       tab.url.split('/')[5] == 'requests'
