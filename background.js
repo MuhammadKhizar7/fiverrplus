@@ -23,7 +23,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         chrome.tabs.executeScript(tabId, {
           // target: { tabId, allFrames: true },
           // func: code,
-          code: "document.documentElement.classList.add('darkmode')",
+          code: "document.documentElement.classList.add('darkmode');",
         })
       }
     })
@@ -38,9 +38,15 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     //     })
     //   }
     // })
+    // ||
+    //   window.location.pathname.split('/')[3] == 'best-matches' ||
+    //   window.location.pathname.split('/')[3] == 'most-recent'
     if (
-      tab.url.split('/').includes('www.fiverr.com') &&
-      tab.url.split('/')[5] == 'requests'
+      (tab.url.split('/').includes('www.fiverr.com') &&
+        tab.url.split('/')[5] == 'requests') ||
+      tab.url.split('/').includes('www.upwork.com') ||
+      tab.url.split('/')[5] == 'best-matches' ||
+      tab.url.split('/')[5] == 'best-matches'
     ) {
       chrome.storage.local.get('store', (data) => {
         if (data.store.isAutoRefresh) {

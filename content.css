@@ -10,9 +10,10 @@ html.darkmode svg,
 html.darkmode video {
   filter: invert(91%) hue-rotate(180deg);
 }
-html.darkmode
-.bg-co-green-700,
+html.darkmode .bg-co-green-700,
 html.darkmode .btn-green-grad,
-html.darkmode .banner {
+html.darkmode .banner
+html.darkmode .preview-image
+html.darkmode .user-image {
   filter: invert(91%) hue-rotate(180deg);
 }

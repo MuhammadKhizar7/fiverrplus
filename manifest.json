@@ -10,10 +10,16 @@
     {
       "css": ["content.css"],
       "js": ["content.js"],
-      "matches": ["*://www.fiverr.com/*"]
+      "matches": ["*://www.fiverr.com/*", "*://www.upwork.com/nx/find-work/*"]
     }
   ],
-  "permissions": ["storage", "activeTab", "tabs", "*://www.fiverr.com/*"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "*://www.fiverr.com/*",
+    "*://www.upwork.com/nx/find-work/*"
+  ],
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {

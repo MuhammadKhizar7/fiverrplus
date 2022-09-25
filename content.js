@@ -1,7 +1,11 @@
 chrome.storage.local.get('store', (data) => {
-  if (data.store.isActive && data.store.isHideBalance) {
+  if (
+    data.store.isActive &&
+    data.store.isHideBalance &&
+    document.getElementsByClassName('user-balance')[0]
+  ) {
     document.getElementsByClassName('user-balance')[0].style.display = 'none'
-  } else {
+  } else if (document.getElementsByClassName('user-balance')[0]) {
     document.getElementsByClassName('user-balance')[0].style.display = 'block'
   }
   if (
@@ -56,4 +60,21 @@ function setUserName() {
 function loadData() {
   console.log('loadData')
   interval = setInterval(setUserName, 500)
+}
+
+function getBgImgs(doc) {
+  const srcChecker = /url\(\s*?['"]?\s*?(\S+?)\s*?["']?\s*?\)/i
+  return Array.from(
+    Array.from(doc.querySelectorAll('*')).reduce((collection, node) => {
+      let prop = window
+        .getComputedStyle(node, null)
+        .getPropertyValue('background-image')
+      // match `url(...)`
+      let match = srcChecker.exec(prop)
+      if (match) {
+        collection.add(match[1])
+      }
+      return collection
+    }, new Set())
+  )
 }
