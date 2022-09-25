@@ -21,26 +21,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     chrome.storage.local.get('store', (data) => {
       if (data.store.isDarkMode) {
         chrome.tabs.executeScript(tabId, {
-          // target: { tabId, allFrames: true },
-          // func: code,
           code: "document.documentElement.classList.add('darkmode');",
         })
       }
     })
   }
   if (changeInfo.status == 'complete') {
-    // chrome.storage.local.get('store', (data) => {
-    //   if (data.store.isDarkMode) {
-    //     chrome.tabs.executeScript(tabId, {
-    //       // target: { tabId, allFrames: true },
-    //       // func: code,
-    //       code: "document.documentElement.classList.add('darkmode')",
-    //     })
-    //   }
-    // })
-    // ||
-    //   window.location.pathname.split('/')[3] == 'best-matches' ||
-    //   window.location.pathname.split('/')[3] == 'most-recent'
     if (
       (tab.url.split('/').includes('www.fiverr.com') &&
         tab.url.split('/')[5] == 'requests') ||
