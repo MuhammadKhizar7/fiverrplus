@@ -88,42 +88,61 @@ function backgroundTimerIntervalStop(tabId) {
   })
 }
 
-let lifeline
+// let lifeline
 
-keepAlive()
+// keepAlive()
 
+// chrome.runtime.onConnect.addListener((port) => {
+//   if (port.name === 'keepAlive') {
+//     lifeline = port
+//     setTimeout(keepAliveForced, 295e3) // 5 minutes minus 5 seconds
+//     port.onDisconnect.addListener(keepAliveForced)
+//   }
+// })
+
+// function keepAliveForced() {
+//   lifeline?.disconnect()
+//   lifeline = null
+//   keepAlive()
+// }
+
+// async function keepAlive() {
+//   if (lifeline) return
+//   for (const tab of await chrome.tabs.query({ url: '*://*/*' })) {
+//     try {
+//       await chrome.scripting.executeScript({
+//         target: { tabId: tab.id },
+//         function: () => chrome.runtime.connect({ name: 'keepAlive' }),
+//         // `function` will become `func` in Chrome 93+
+//       })
+//       chrome.tabs.onUpdated.removeListener(retryOnTabUpdate)
+//       return
+//     } catch (e) {}
+//   }
+//   chrome.tabs.onUpdated.addListener(retryOnTabUpdate)
+// }
+
+// async function retryOnTabUpdate(tabId, info, tab) {
+//   if (info.url && /^(file|https?):/.test(info.url)) {
+//     keepAlive()
+//   }
+// }
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === 'keepAlive') {
-    lifeline = port
-    setTimeout(keepAliveForced, 295e3) // 5 minutes minus 5 seconds
-    port.onDisconnect.addListener(keepAliveForced)
-  }
+  if (port.name !== 'foo') return
+  port.onMessage.addListener(onMessage)
+  port.onDisconnect.addListener(deleteTimer)
+  port._timer = setTimeout(forceReconnect, 250e3, port)
 })
-
-function keepAliveForced() {
-  lifeline?.disconnect()
-  lifeline = null
-  keepAlive()
+function onMessage(msg, port) {
+  console.log('received', msg, 'from', port.sender)
 }
-
-async function keepAlive() {
-  if (lifeline) return
-  for (const tab of await chrome.tabs.query({ url: '*://*/*' })) {
-    try {
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: () => chrome.runtime.connect({ name: 'keepAlive' }),
-        // `function` will become `func` in Chrome 93+
-      })
-      chrome.tabs.onUpdated.removeListener(retryOnTabUpdate)
-      return
-    } catch (e) {}
-  }
-  chrome.tabs.onUpdated.addListener(retryOnTabUpdate)
+function forceReconnect(port) {
+  deleteTimer(port)
+  port.disconnect()
 }
-
-async function retryOnTabUpdate(tabId, info, tab) {
-  if (info.url && /^(file|https?):/.test(info.url)) {
-    keepAlive()
+function deleteTimer(port) {
+  if (port._timer) {
+    clearTimeout(port._timer)
+    delete port._timer
   }
 }

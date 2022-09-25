@@ -57,3 +57,13 @@ function loadData() {
   console.log('loadData')
   interval = setInterval(setUserName, 500)
 }
+
+let port
+function connect() {
+  port = chrome.runtime.connect({ name: 'foo' })
+  port.onDisconnect.addListener(connect)
+  port.onMessage.addListener((msg) => {
+    console.log('received', msg, 'from bg')
+  })
+}
+connect()
