@@ -17,3 +17,7 @@ html.darkmode .preview-image
 html.darkmode .user-image {
   filter: invert(91%) hue-rotate(180deg);
 }
+
+.up-rating svg{
+  filter: none !important
+}
