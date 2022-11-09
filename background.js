@@ -17,10 +17,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete') {
-    if (
-      tab.url.split('/').includes('www.fiverr.com') &&
-      tab.url.split('/')[5] == 'requests'
-    ) {
+    if (tab.url.split('/').includes('www.fiverr.com')) {
       chrome.storage.local.get('store', (data) => {
         if (data.store.isAutoRefresh) {
           backgroundTimerIntervalStop(tabId)
