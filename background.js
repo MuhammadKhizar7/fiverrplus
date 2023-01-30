@@ -27,6 +27,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
           backgroundTimeInterval(180, 180, tabId)
         }
       })
+    } else {
+      backgroundTimerIntervalStop(tabId)
     }
   }
 })

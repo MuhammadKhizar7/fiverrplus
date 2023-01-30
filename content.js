@@ -5,3 +5,4 @@ chrome.storage.local.get('store', (data) => {
     document.getElementsByClassName('user-balance')[0].style.display = 'block'
   }
 })
+
