@@ -2,9 +2,9 @@
   "name": "FiverrPlus",
   "description": "FiverrPlus is tool to help seller like show username link before request, auto refresh request page to stay online and upto date buyer request and also you a option to hide banlance ",
   "version": "1.0",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
@@ -13,9 +13,8 @@
       "matches": ["*://www.fiverr.com/*"]
     }
   ],
-  "permissions": ["storage", "activeTab", "tabs", "scripting"],
-  "host_permissions": ["*://www.fiverr.com/*"],
-  "action": {
+  "permissions": ["storage", "activeTab", "tabs", "*://www.fiverr.com/*"],
+  "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "/images/favicon-16x16.png",

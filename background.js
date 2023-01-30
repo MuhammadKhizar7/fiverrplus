@@ -5,7 +5,7 @@ let store = {
   isAutoRefresh: true,
 }
 
-chrome.action.setBadgeBackgroundColor({ color: '#e32f02' })
+chrome.browserAction.setBadgeBackgroundColor({ color: '#e32f02' })
 
 chrome.runtime.onInstalled.addListener((details) => {
   chrome.storage.local.get('store', (data) => {
@@ -19,7 +19,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete') {
     if (
       tab.url.split('/').includes('www.fiverr.com') &&
-      tab.url.split('/')[5].split('?')[0] == 'requests'
+      tab.url.split('/').includes('seller_dashboard')
     ) {
       chrome.storage.local.get('store', (data) => {
         if (data.store.isAutoRefresh) {
@@ -35,9 +35,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 function refresh(tabId) {
   var code = () => window.location.reload()
-  chrome.scripting.executeScript({
-    target: { tabId, allFrames: true },
-    func: code,
+  chrome.tabs.executeScript(tabId, {
+    // target: { tabId, allFrames: true },
+    // func: code,
+    code: 'window.location.reload()',
   })
 }
 
@@ -48,7 +49,7 @@ function backgroundTimeInterval(timer, totalSec, tabId) {
     ('0' + Math.floor(timer / 60)).slice(-2) +
     ':' +
     ('0' + (timer % 60)).slice(-2)
-  chrome.action.setBadgeText({
+  chrome.browserAction.setBadgeText({
     tabId: tabId,
     text: badge,
   })
@@ -70,7 +71,7 @@ function backgroundTimeInterval(timer, totalSec, tabId) {
           ('0' + Math.floor(timer / 60)).slice(-2) +
           ':' +
           ('0' + (timer % 60)).slice(-2)
-        chrome.action.setBadgeText({
+        chrome.browserAction.setBadgeText({
           tabId: tabId,
           text: badge,
         })
@@ -82,67 +83,8 @@ function backgroundTimeInterval(timer, totalSec, tabId) {
 // Stop Timer Interval
 function backgroundTimerIntervalStop(tabId) {
   clearInterval(timeinterval)
-  chrome.action.setBadgeText({
+  chrome.browserAction.setBadgeText({
     tabId: tabId,
     text: '',
   })
-}
-
-// let lifeline
-
-// keepAlive()
-
-// chrome.runtime.onConnect.addListener((port) => {
-//   if (port.name === 'keepAlive') {
-//     lifeline = port
-//     setTimeout(keepAliveForced, 295e3) // 5 minutes minus 5 seconds
-//     port.onDisconnect.addListener(keepAliveForced)
-//   }
-// })
-
-// function keepAliveForced() {
-//   lifeline?.disconnect()
-//   lifeline = null
-//   keepAlive()
-// }
-
-// async function keepAlive() {
-//   if (lifeline) return
-//   for (const tab of await chrome.tabs.query({ url: '*://*/*' })) {
-//     try {
-//       await chrome.scripting.executeScript({
-//         target: { tabId: tab.id },
-//         function: () => chrome.runtime.connect({ name: 'keepAlive' }),
-//         // `function` will become `func` in Chrome 93+
-//       })
-//       chrome.tabs.onUpdated.removeListener(retryOnTabUpdate)
-//       return
-//     } catch (e) {}
-//   }
-//   chrome.tabs.onUpdated.addListener(retryOnTabUpdate)
-// }
-
-// async function retryOnTabUpdate(tabId, info, tab) {
-//   if (info.url && /^(file|https?):/.test(info.url)) {
-//     keepAlive()
-//   }
-// }
-chrome.runtime.onConnect.addListener((port) => {
-  if (port.name !== 'foo') return
-  port.onMessage.addListener(onMessage)
-  port.onDisconnect.addListener(deleteTimer)
-  port._timer = setTimeout(forceReconnect, 250e3, port)
-})
-function onMessage(msg, port) {
-  console.log('received', msg, 'from', port.sender)
-}
-function forceReconnect(port) {
-  deleteTimer(port)
-  port.disconnect()
-}
-function deleteTimer(port) {
-  if (port._timer) {
-    clearTimeout(port._timer)
-    delete port._timer
-  }
 }
