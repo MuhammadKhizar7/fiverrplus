@@ -18,8 +18,9 @@ chrome.runtime.onInstalled.addListener((details) => {
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete') {
     if (
-      tab.url.split('/').includes('www.fiverr.com') &&
-      tab.url.split('/').includes('seller_dashboard')
+      tab.url.includes('www.fiverr.com') &&
+      (tab.url.includes('seller_dashboard') ||
+        tab.url.includes('public_mode=true'))
     ) {
       chrome.storage.local.get('store', (data) => {
         if (data.store.isAutoRefresh) {
@@ -32,6 +33,24 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     }
   }
 })
+
+// chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+//   if (changeInfo.status == 'complete') {
+//     if (
+//       tab.url.split('/').includes('www.upwork.com') &&
+//       tab.url.split('/').includes('most-recent')
+//     ) {
+//       chrome.storage.local.get('store', (data) => {
+//         if (data.store.isAutoRefresh) {
+//           backgroundTimerIntervalStop(tabId)
+//           backgroundTimeInterval(180, 180, tabId)
+//         }
+//       })
+//     } else {
+//       backgroundTimerIntervalStop(tabId)
+//     }
+//   }
+// })
 
 function refresh(tabId) {
   var code = () => window.location.reload()
