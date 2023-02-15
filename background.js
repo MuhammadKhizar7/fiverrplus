@@ -43,22 +43,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   }
 })
 
-// chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-//   if (changeInfo.status == 'complete') {
-//     if (
-//       tab.url.split('/').includes('www.upwork.com') &&
-//       tab.url.split('/').includes('most-recent')
-//     ) {
-//       chrome.storage.local.get('store', (data) => {
-//         if (data.store.isAutoRefresh) {
-//           backgroundTimerIntervalStop(tabId, 'upwork')
-//           backgroundTimeInterval(180, 180, tabId, 'upwork')
-//         }
-//       })
-//     }
-//   }
-// })
-
 function refresh(tabId) {
   var code = () => window.location.reload()
   chrome.tabs.executeScript(tabId, {
