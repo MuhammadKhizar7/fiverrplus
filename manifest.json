@@ -1,10 +1,10 @@
 {
   "name": "FiverrPlus",
-  "description": "FiverrPlus is tool to help seller like show username link before request, auto refresh request page to stay online and upto date buyer request and also you a option to hide banlance ",
+  "description": "FiverrPlus is a tool to help sellers like show username link before request, auto refresh request page to stay online and upto date buyer request and also you an option to hide balance.",
   "version": "1.0",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -13,14 +13,9 @@
       "matches": ["*://www.fiverr.com/*"]
     }
   ],
-  "permissions": [
-    "storage",
-    "activeTab",
-    "tabs",
-    "*://www.fiverr.com/*",
-    "*://www.upwork.com/*"
-  ],
-  "browser_action": {
+  "permissions": ["storage", "tabs", "scripting"],
+  "host_permissions": ["*://www.fiverr.com/*", "*://www.upwork.com/*"],
+  "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "/images/favicon-16x16.png",
