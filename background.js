@@ -54,7 +54,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       } else if (
         tab.url &&
         tab.url.includes('www.upwork.com') &&
-        tab.url.includes('most-recent')
+        (tab.url.includes('most-recent') ||
+          tab.url.includes('best-matches'))
       ) {
         if (isAutoRefresh) {
           // Stop any existing Upwork timer for this tab
